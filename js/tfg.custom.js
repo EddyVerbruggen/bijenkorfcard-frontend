@@ -62,11 +62,10 @@ function isLoggedIn() {
   return getPassword() != null;
 }
 
-function registerTfgPartner(loginName, password, keepLoggedIn) {
-  localStorage.setItem("registeredForApp", true);
-  localStorage.setItem("keepLoggedIn", keepLoggedIn);
-  localStorage.setItem("password", password);
+function rememberLogin(loginName, password) { //, keepLoggedIn) {
   localStorage.setItem("loginName", loginName);
+  localStorage.setItem("password", password);
+//  localStorage.setItem("keepLoggedIn", keepLoggedIn);
 }
 
 function isRegisteredTfgPartner() {

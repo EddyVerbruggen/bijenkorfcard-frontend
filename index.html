@@ -17,65 +17,50 @@
 </head>
 <body>
 
+<script type="text/javascript">
+  function loadCardData(loginname, password, successFunction) {
+    $.mobile.loading('show');
+    var url = "http://www.libwat.ch/cards/bijenkorf/" + loginname + "/" + password;
+
+    setTimeout(function () {
+      $.ajax({
+        dataType:"json",
+        async:true,
+        url:url,
+        success:successFunction,
+        error:function () {
+          alert('Verkeerder login. Probeer het nogmaals.');
+          $.mobile.loading('hide');
+        }
+      });
+    }, 200);
+  }
+</script>
 
 <!-- Page: Login page -->
 <div id="loginPage" data-role="page">
   <script language="JavaScript">
-    $('#loginPage').live('pagebeforecreate', function(e, data) {
-//        if (!isRegisteredTfgPartner()) {
-        // If not yet registered, redirect to the unknown page, where a button to register appears
-//          $.mobile.changePage($("#unknownPage"), {transition:"none"});
-      if (isKeepLoggedIn()) {
-        // TODO auto login, then go to home
-//        $.mobile.changePage($("#homePage"), {transition:"none"});
-//      } else if (!isLoggedIn()) {
-        // login
-        $.mobile.changePage($("#homePage"), {transition:"none"});
-      }
-    });
+//    $('#loginPage').live('pagebeforecreate', function (e, data) {
+//      if (isKeepLoggedIn()) {
+//        loadCardData(getLoginName(), getPassword(), function() {
+//          $.mobile.changePage($("#homePage"), {transition:"none"});
+//        });
+//      }
+//    });
 
 
     $('#loginPage').live('pagebeforeshow', function (e, data) {
       $("#loginName").val(getLoginName());
-      $("#keepLoggedIn").attr("checked", isKeepLoggedIn());
-      $('#loginButton').click(function() {
+//      if (isKeepLoggedIn()) {
+//        $("#keepLoggedIn").attr("checked", "checked");
+//      }
+      $('#loginButton').click(function () {
         $('#loginButton').unbind("click");
-        $.mobile.loading('show');
-
-        // Woutdool
-        // Dekroegb1
-        var url = "http://www.libwat.ch/cards/bijenkorf/"+$("#loginName").val()+"/"+$("#password").val();
-
-        setTimeout(function() {
-          $.ajax({
-            dataType: "json",
-            async: false,
-            url: url,
-            success: function(data) {
-              localStorage.setItem("CardResponse", JSON.stringify(data));
-              $.mobile.changePage($("#homePage"));
-            },
-            error: function() {
-              alert('Verkeerder login. Probeer het nogmaals.');
-              $.mobile.loading('hide');
-            }
-          });
-        }, 250);
-
-        /*
-
-        // simulate a delay. TODO, real impl
-        setTimeout(function() {
-          // Login the user
-          registerTfgPartner($('#loginName').val(), $('#password').val(), $("#keepLoggedIn").val() == "on");
-          $("#loginName").val(null);
-          $("#password").val(null);
-
-          if (isRegisteredTfgPartner()) {
-            $.mobile.changePage($("#homePage"));
-          }
-        }, 750);
-        */
+        loadCardData($("#loginName").val(), $("#password").val(), function (data) {
+          rememberLogin($('#loginName').val(), $('#password').val()); //, $("#keepLoggedIn").val() == "on");
+          localStorage.setItem("CardResponse", JSON.stringify(data));
+          $.mobile.changePage($("#homePage"));
+        });
       })
     });
   </script>
@@ -89,11 +74,11 @@
       <input type="text" name="loginName" id="loginName" value="" placeholder="Gebruikersnaam"/>
       <input type="password" name="password" id="password" value="" placeholder="Wachtwoord"/>
       <br/>
-      <label for="keepLoggedIn">
-        <input type="checkbox" id="keepLoggedIn" checked="" data-mini="true"/>
+      <!--label for="keepLoggedIn">
+        <input type="checkbox" id="keepLoggedIn" data-mini="true"/>
         Ik wil ingelogd blijven
       </label>
-      <br/>
+      <br/-->
       <input type="button" data-role="button" data-mini="true" data-inline="true" id="loginButton" data-icon="arrow-r" data-iconpos="right" data-theme="a" value="inloggen"/>
     </form>
   </div>
@@ -101,12 +86,11 @@
 <!-- End page: Login page -->
 
 
-
 <!-- Page: Home page -->
 <div id="homePage" data-role="page">
   <script language="JavaScript">
 
-    $('#homePage').live('pagebeforeshow', function(e, data) {
+    $('#homePage').live('pagebeforeshow', function (e, data) {
       var cardResponse = JSON.parse(localStorage.getItem("CardResponse"));
       $("#bestedingslimiet").html("Bestedingslimiet: " + cardResponse.totals.bestedingslimiet);
       $("#openstaandsaldo").html("Gebruikt: " + cardResponse.totals.openstaandsaldo);
@@ -115,26 +99,36 @@
       var prevDate = null;
       $(cardResponse.transactions).each(function (i, transaction) {
         if (transaction.datum != prevDate) {
-          htmlList += '<li data-role="list-divider">'+transaction.datum+'</li>';
+          htmlList += '<li data-role="list-divider">' + transaction.datum + '</li>';
         }
         prevDate = transaction.datum;
         htmlList += '' +
-             '<li>' +
+            '<li>' +
 //               '  <a href="#personPage?id='+person.id+'">' +
 //             '    <h3>Kaart '+transaction.cardnr+'</h3>' +
-             '    <p>'+transaction.omschrijving+'</p>' +
-            (transaction.oorsprbedrag ? '<p style="color:#888">'+transaction.oorsprvaluta + ' ' + transaction.oorsprbedrag+'</p>' : '') +
-            '     <span class="ui-li-count '+(transaction.credit ? 'ui-li-count-green' : '')+'">'+ transaction.valuta + ' ' + transaction.bedrag+'</span>'
+            '    <p>' + transaction.omschrijving + '</p>' +
+            (transaction.oorsprbedrag ? '<p style="color:#888">' + transaction.oorsprvaluta + ' ' + transaction.oorsprbedrag + '</p>' : '') +
+            '     <span class="ui-li-count ' + (transaction.credit ? 'ui-li-count-green' : '') + '">' + transaction.valuta + ' ' + transaction.bedrag + '</span>' +
 //               '  </a>' +
-             '</li>';
+        '</li>';
       });
-
       $("#list").html(htmlList);
       $("#list").listview("refresh");
+
+//      $("#backToLogin").bind("click", function() {
+//        localStorage.setItem("keepLoggedIn", null);
+//      });
+
     });
+
+    $('#homePage').live('pagebeforehide', function (e, data) {
+      $("#backToLogin").unbind("click");
+    });
+
   </script>
   <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
-    <a data-icon="arrow-l" data-direction="reverse" href="#loginPage" class="button_back">Log uit</a>
+    <a id="backToLogin" data-icon="arrow-l" data-direction="reverse" href="#loginPage" class="button_back">Log uit</a>
+
     <h1>Kaartoverzicht</h1>
   </div>
 
@@ -143,7 +137,7 @@
     <ul id="totals" data-role="listview" data-inset="true" data-divider-theme="d">
       <li data-role="list-divider" id="bestedingslimiet"></li>
       <li style="font-size: 0.8em" id="openstaandsaldo"></li>
-      <li style="font-size: 0.8em"  id="nogtebesteden"></li>
+      <li style="font-size: 0.8em" id="nogtebesteden"></li>
     </ul>
     <h3>Recente transacties</h3>
     <ul id="list" data-role="listview" data-inset="true" data-divider-theme="d"></ul>

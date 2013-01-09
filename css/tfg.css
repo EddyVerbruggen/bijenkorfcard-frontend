@@ -281,6 +281,10 @@ input::-webkit-input-placeholder {
   );
 }
 
+.ui-li-has-count .ui-btn-up-c {
+  text-shadow: none;
+}
+
 #homePage .ui-li-has-count {
   padding-right: 70px;
 }
