@@ -5,17 +5,20 @@
 .ui-page {
   background-color: #fff;
   background-image: url('../img/background.png');
-  background-size: 482px 568px;
+  background-size: 619px 645px;
+  /*background-size: 482px 568px;*/
   background-repeat: no-repeat;
-  background-position: bottom left;
+  background-position: bottom right;
    -webkit-backface-visibility: hidden;  /* without this, Android pages may flicker after slide transitions */
 }
 
+/*
 @media (min-width:640px), (min-height:740px) {
   .ui-page {
-    background-size: 964px 1136px;
+    background-size: 619px 645px;
   }
 }
+*/
 
 .ui-bar-c {
   text-shadow: #000 0 1px 1px;
@@ -258,12 +261,28 @@ input::-webkit-input-placeholder {
   padding: 2px 6px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
   font: 12px Arial;
-  font-weight: bold;
+  font-weight: normal !important;
   position: relative;
   float: right;
   top: 10%;
   right: 10%;
   z-index: 9999;
+}
+
+.ui-li-count-green {
+  background: -moz-linear-gradient(center top , lightgreen, darkgreen) repeat scroll 0 0 padding-box transparent;
+  background-image: -webkit-gradient(
+  	linear,
+  	left bottom,
+  	left top,
+  	color-stop(0.14, darkgreen),
+    color-stop(0.57, darkgreen),
+  	color-stop(0.79, lightgreen)
+  );
+}
+
+#homePage .ui-li-has-count {
+  padding-right: 70px;
 }
 
 #personPage .ui-content {

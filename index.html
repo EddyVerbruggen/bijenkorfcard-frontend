@@ -17,405 +17,139 @@
 </head>
 <body>
 
-  <!-- Page: Home page -->
-  <div id="homePage" data-role="page">
-    <script language="JavaScript">
-      $('#homePage').live('pagebeforecreate', function(e, data) {
-        if (!isRegisteredTfgPartner()) {
-          // If not yet registered, redirect to the unknown page, where a button to register appears
-          $.mobile.changePage($("#unknownPage"), {transition:"none"});
-        } else if (isKeepLoggedIn()) {
-          // TODO auto login, then go to home
-          $.mobile.changePage($("#homePage"), {transition:"none"});
-        } else if (!isLoggedIn()) {
-          // login
-          $.mobile.changePage($("#loginPage"), {transition:"none"});
-        }
-      });
 
-      $('#homePage').live('pagebeforeshow', function(e, data) {
+<!-- Page: Login page -->
+<div id="loginPage" data-role="page">
+  <script language="JavaScript">
+    $('#loginPage').live('pagebeforecreate', function(e, data) {
+//        if (!isRegisteredTfgPartner()) {
+        // If not yet registered, redirect to the unknown page, where a button to register appears
+//          $.mobile.changePage($("#unknownPage"), {transition:"none"});
+      if (isKeepLoggedIn()) {
+        // TODO auto login, then go to home
+//        $.mobile.changePage($("#homePage"), {transition:"none"});
+//      } else if (!isLoggedIn()) {
+        // login
+        $.mobile.changePage($("#homePage"), {transition:"none"});
+      }
+    });
 
-        $('#logoutBlock').click(function() {
-          logout();
-          $.mobile.changePage($("#loginPage"), {reverse: true});
-        });
 
-        $('#newsBlock').click(function() {
-          $.mobile.changePage($("#newsPage"));
-        });
+    $('#loginPage').live('pagebeforeshow', function (e, data) {
+      $("#loginName").val(getLoginName());
+      $("#keepLoggedIn").attr("checked", isKeepLoggedIn());
+      $('#loginButton').click(function() {
+        $('#loginButton').unbind("click");
+        $.mobile.loading('show');
 
-        $('#peopleBlock').click(function() {
-          $.mobile.changePage($("#peoplePage"));
-        });
+        // Woutdool
+        // Dekroegb1
+        var url = "http://www.libwat.ch/cards/bijenkorf/"+$("#loginName").val()+"/"+$("#password").val();
 
-        $('#settingsBlock').click(function() {
-          $.mobile.changePage($("#settingsPage"));
-        });
-
-        // Auto login enabled, just show the page
-//        loadUser();
-//        alert(getUser());
-//        $("#status").html(getUser());
-      });
-
-      $('#homePage').live('pagebeforehide', function(e, data) {
-        // Unbinding events. Must be done here, because we need to unbind, even when they have not been clicked.
-        $('#logoutBlock').unbind("click");
-        $('#newsBlock').unbind("click");
-        $('#peopleBlock').unbind("click");
-        $('#settingsBlock').unbind("click");
-      });
-    </script>
-    <div data-role="header" data-tap-toggle="false" data-position="fixed">
-      <h1>Home</h1>
-    </div>
-    <div data-role="content">
-      <ul id="header" data-role="listview" data-inset="true">
-
-        <li id="indexHeader" data-icon="false">
-          <img id="pasfoto" src="img/pasfoto/3.jpg" width="96px" height="96px"/>
-
-          <h2>Ik</h2>
-          <p>@Rabobank t/m 5 mei 2013</p>
-
-          <!--div id="status" contenteditable="false"></div>
-          <div id="editButton" onclick="makeStatusEditable()"><img src="img/edit.png" width="16px" height="16px"/></div>
-          <div id="saveButton" onclick="saveStatus()"><img src="img/save.gif" width="16px" height="16px"/></div-->
-        </li>
-      </ul>
-
-      <div class="ui-grid-a">
-        <div id="peopleBlock"   class="ui-block-a home_block home_block_top_left">maten</div>
-        <div id="newsBlock"     class="ui-block-b home_block home_block_top_right has-count">nieuws<span class="ui-li-count">2</span></div>
-        <div id="settingsBlock" class="ui-block-a home_block home_block_bottom_left">instellingen</div>
-        <div id="logoutBlock"   class="ui-block-b home_block home_block_bottom_right">uitloggen</div>
-      </div>
-    </div>
-  </div>
-  <!-- End page: Home page -->
-
-  <!-- Page: People page -->
-  <div id="peoplePage" data-role="page">
-    <script language="JavaScript">
-
-      $('#peoplePage').bind('swiperight', function() {
-        $.mobile.changePage($("#homePage"), {reverse:true});
-      });
-
-      $("#popupPanel").live("popupbeforeposition", function() {
-        $("#popupPanel").css("height", $(window).height());
-      });
-
-      $('#peoplePage').live('pagebeforeshow', function(e, data) {
-        $.getJSON(getServiceURL("/people/list"))
-          .success(function(data) {
-            var htmlList = "";
-            $(data).each(function (personIdx, person) {
-               htmlList += '' +
-                   '<li>' +
-                   '  <a href="#personPage?id='+person.id+'">' +
-                   '    <h3>'+person.name+'</h3>' +
-                   '    <p>bla bla bla</p>' +
-                   '  </a>' +
-                   '</li>';
-            });
-
-            $("#peopleList").html(htmlList);
-            $("#peopleList").listview("refresh");
-          })
-
-          .error(function(XMLHttpRequest, textStatus, errorThrown) {
-            if (XMLHttpRequest.status == 0) {
-              alert("Server onbereikbaar: " + getServiceURL(""));
-            } else {
-              alert(textStatus);
-            }
-          })
-      });
-    </script>
-    <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
-      <a data-icon="arrow-l" data-direction="reverse" href="#homePage" class="button_back">Home</a>
-      <h1>Overzicht maten</h1>
-      <a data-icon="grid" data-iconpos="notext" href="#popupPanel" data-rel="popup" data-transition="slide" data-position-to="window" class="ui-btn-right" id="menu_title"></a>
-    </div>
-
-    <div data-role="popup" id="popupPanel" data-corners="false" data-theme="none" data-shadow="false" data-tolerance="0,0">
-      <br/>
-      <br/>
-      <!--a data-role="button" data-theme="a" data-icon="grid" data-mini="true" href="#editvideosources" data-direction="reverse" id="menu_option_editvideosources"></a-->
-      <!--button data-theme="a" data-icon="search" data-mini="true">Zoek video</button-->
-      <!--a data-role="button" data-theme="a" data-icon="info" data-mini="true" href="#about" data-transition="flip" id="menu_option_about"></a-->
-      <a data-role="button" data-theme="c" data-icon="delete" data-mini="true" onclick="$('#popupPanel').popup('close')" id="menu_option_close">sluiten</a>
-    </div>
-
-    <div data-role="content">
-      <ul id="peopleList" data-role="listview" data-inset="true" data-divider-theme="d"></ul>
-    </div>
-  </div>
-  <!-- End page: People page -->
-
-  <!-- Page: person -->
-  <div id="personPage" data-role="page">
-    <script language="JavaScript">
-      $('#personPage').bind('swiperight', function() {
-        $.mobile.changePage($("#peoplePage"), {reverse:true});
-      });
-
-      $('#personPage').live('pagebeforeshow', function(e, data) {
-        $('#previousPerson').bind('click', function() {
-          $.mobile.changePage("#personPage?id=3", {transition: 'slideup', allowSamePageTransition: true});
-        });
-        $('#nextPerson').bind('click', function() {
-          $.mobile.changePage("#personPage?id=5", {transition: 'slidedown', allowSamePageTransition: true});
-        });
-      });
-
-      $('#personPage').live('pagebeforehide', function(e, data) {
-        $('#previousPerson').unbind('click');
-        $('#nextPerson').unbind('click');
-      });
-
-    </script>
-    <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
-      <a data-icon="arrow-l" data-direction="reverse" href="#peoplePage" class="button_back">Maten</a>
-      <h1>Details maat</h1>
-      <div data-role="controlgroup" data-type="horizontal" class="ui-btn-right">
-        <a id="previousPerson" data-icon="arrow-u" data-role="button" data-transition="slideup" href="#" data-iconpos="notext">up</a>
-        <a id="nextPerson" data-icon="arrow-d" data-role="button" data-transition="slidedown" href="#" data-iconpos="notext"></a>
-      </div>
-    </div>
-    <div data-role="content">
-      <fieldset class="person-image-and-name">
-        <div class="person-image">
-          <img src="img/pasfoto/3.jpg" width="96px" height="96px"/>
-        </div>
-        <div class="person-name">
-          <h2>Hans van den Boom</h2>
-          <p>Java, Amsterdam</p>
-          <p>@Rabobank t/m feb 2013</p>
-        </div>
-      </fieldset>
-
-      <fieldset class="person-contact">
-        <p><a href="tel:06 50 298 958">06 50 298 958</a></p>
-        <p><a href="mailto:hvdboom@tfg.nl">hvdboom@tfg.nl</a></p>
-        <!-- De linkedin app openen mbv een link kan nog niet, dus tonen webversie in browser: http://developer.linkedin.com/forum/link-open-linkedin-profile-browser-ios-linkedin-app -->
-        <p><a rel="external" href="http://nl.linkedin.com/pub/eddy-verbruggen/1/6b8/739">LinkedIn</a></p>
-      </fieldset>
-
-      <div data-role="collapsible-set" data-inset="false">
-        <div data-role="collapsible" data-theme="a" data-content-theme="c" data-inset="false" data-iconpos="right">
-          <h2>Klanten</h2>
-          <ul id="customerList" data-role="listview" data-inset="false" data-theme="c" data-divider-theme="d" data-filter="true" data-filter-theme="c" data-filter-placeholder="Zoek..">
-            <li data-role="list-divider">
-              2013
-            </li>
-            <li>
-              <h3>Klant a</h3>
-              <p>
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-              </p>
-            </li>
-            <li data-role="list-divider">
-              2012
-            </li>
-            <li>
-              <h3>Klant b</h3>
-              <p>
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-              </p>
-            </li>
-            <li>
-              <h3>Klant c</h3>
-              <p>
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-                Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier. Beschrijving hier.
-              </p>
-            </li>
-          </ul>
-        </div>
-
-        <div data-role="collapsible" data-collapsed="false" data-theme="a" data-content-theme="c" data-inset="false" data-iconpos="right">
-          <h2>Kennis en vaardigheden</h2>
-          <ul id="skillList" data-role="listview" data-inset="false" data-theme="c" data-divider-theme="d">
-            <li>
-              <img src="img/skill/java.jpg" width="48px" height="48px"/>
-              <h3>Java</h3>
-              <p>bla bla bla</p>
-            </li>
-            <li>
-              <img src="img/skill/wordpress.png" width="48px" height="48px"/>
-              <h3>Wordpress</h3>
-              <p>bla bla bla bla bla</p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End page: person -->
-
-  <!-- Page: Unknown page (not yet registered) -->
-  <div id="unknownPage" data-role="page">
-    <script language="JavaScript">
-      $('#unknownPage').live('pagebeforeshow', function (e, data) {
-        $('#loginPageLink').click(function() {
-          $.mobile.changePage($("#loginPage"));
-        });
-
-        $('#tfgWebsiteLink').click(function() {
-          window.open("http://www.the-future-group.com/");
-        })
-      });
-
-      $('#unknownPage').live('pagebeforehide', function (e, data) {
-        $('#loginPageLink').unbind("click");
-        $('#tfgWebsiteLink').unbind("click");
-      });
-    </script>
-    <div data-role="header" data-tap-toggle="false" data-position="fixed">
-      <h1>Welkom</h1>
-    </div>
-    <div data-role="content">
-      <div class="ui-grid-solo">
-        <div id="loginPageLink" class="ui-grid-solo unknown_block unknown_block_first" href="#loginPage">
-          Ik ben een maat bij The Future Group en wil me graag eenmalig registreren met mijn MyTFG gegevens.
-        </div>
-        <br/>
-        <div id="tfgWebsiteLink" class="ui-grid-solo unknown_block unknown_block_second">
-          <!--a href="http://www.the-future-group.com/" rel="external"-->
-          Ik ben (nog) geen maat bij The Future Group. Bezoekers kunnen een kijkje nemen op onze mobiele website (u verlaat de app).
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End page: Unknown page -->
-
-  <!-- Page: Login page -->
-  <div id="loginPage" data-role="page">
-    <script language="JavaScript">
-      $('#loginPage').live('pagebeforeshow', function (e, data) {
-        $("#loginName").val(getLoginName());
-        $("#keepLoggedIn").attr("checked", isKeepLoggedIn());
-        $('#loginButton').click(function() {
-          $('#loginButton').unbind("click");
-          $.mobile.loading('show');
-          // simulate a delay. TODO, real impl
-          setTimeout(function() {
-            // Login the user
-            registerTfgPartner($('#loginName').val(), $('#password').val(), $("#keepLoggedIn").val() == "on");
-            $("#loginName").val(null);
-            $("#password").val(null);
-
-            if (isRegisteredTfgPartner()) {
+        setTimeout(function() {
+          $.ajax({
+            dataType: "json",
+            async: false,
+            url: url,
+            success: function(data) {
+              localStorage.setItem("CardResponse", JSON.stringify(data));
               $.mobile.changePage($("#homePage"));
+            },
+            error: function() {
+              alert('Verkeerder login. Probeer het nogmaals.');
+              $.mobile.loading('hide');
             }
-          }, 750);
-        })
-      });
-    </script>
-    <div data-role="header" data-tap-toggle="false" data-position="fixed">
-      <h1>inloggen</h1>
-    </div>
-    <div data-role="content">
-      <h2>Log in met je MyTFG inlog&shy;gegevens</h2>
+          });
+        }, 250);
 
-      <form id="loginForm" style="text-align: right">
-        <input type="text" name="loginName" id="loginName" value="" placeholder="MyTFG gebruikersnaam"/>
-        <input type="password" name="password" id="password" value="" placeholder="MyTFG wachtwoord"/>
-        <br/>
-        <label for="keepLoggedIn">
-          <input type="checkbox" id="keepLoggedIn" checked="" data-mini="true"/>
-          Ik wil ingelogd blijven
-        </label>
-        <br/>
-        <input type="button" data-role="button" data-mini="true" data-inline="true" id="loginButton" data-icon="arrow-r" data-iconpos="right" data-theme="a" value="inloggen"/>
-      </form>
-    </div>
+        /*
+
+        // simulate a delay. TODO, real impl
+        setTimeout(function() {
+          // Login the user
+          registerTfgPartner($('#loginName').val(), $('#password').val(), $("#keepLoggedIn").val() == "on");
+          $("#loginName").val(null);
+          $("#password").val(null);
+
+          if (isRegisteredTfgPartner()) {
+            $.mobile.changePage($("#homePage"));
+          }
+        }, 750);
+        */
+      })
+    });
+  </script>
+  <div data-role="header" data-tap-toggle="false" data-position="fixed">
+    <h1>inloggen</h1>
   </div>
-  <!-- End page: Login page -->
+  <div data-role="content">
+    <h2>Log in met je Bijenkorf kaart&shy;gegevens</h2>
 
-  <!-- Page: News page -->
-  <div id="newsPage" data-role="page">
-    <script language="JavaScript">
-      $('#newsPage').bind('swiperight', function() {
-        $.mobile.changePage($("#homePage"), {reverse:true});
-      });
-
-      $('#newsPage').live('pagebeforecreate', function(e, data) {
-        $.getJSON(getServiceURL("/news/list"))
-            .success(function(data) {
-              var htmlList = "";
-              $(data).each(function (newsIdx, data) {
-                htmlList += '<ul class="newsListUl" data-role="listview" data-inset="true" data-divider-theme="d">';
-                htmlList += '  <li data-role="list-divider">' + data.title + '</li>';
-                htmlList += '  <li data-theme="d"><p>' + data.content + '</p></li>';
-                htmlList += "</ul>";
-              });
-
-              $("#newsList").html(htmlList);
-              $(".newsListUl").listview();
-            })
-
-            .error(function(XMLHttpRequest, textStatus, errorThrown) {
-              if (XMLHttpRequest.status == 0) {
-                alert("Server onbereikbaar: " + getServiceURL(""));
-              } else {
-                alert(textStatus);
-              }
-            })
-      });
-    </script>
-    <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
-      <a href="#homePage" data-icon="arrow-l" data-direction="reverse" class="button_back">Home</a>
-      <h1>Nieuws</h1>
-    </div>
-    <div id="scroller" data-role="content">
-      <div id="newsList"></div>
-    </div>
+    <form id="loginForm" style="text-align: right">
+      <input type="text" name="loginName" id="loginName" value="" placeholder="Gebruikersnaam"/>
+      <input type="password" name="password" id="password" value="" placeholder="Wachtwoord"/>
+      <br/>
+      <label for="keepLoggedIn">
+        <input type="checkbox" id="keepLoggedIn" checked="" data-mini="true"/>
+        Ik wil ingelogd blijven
+      </label>
+      <br/>
+      <input type="button" data-role="button" data-mini="true" data-inline="true" id="loginButton" data-icon="arrow-r" data-iconpos="right" data-theme="a" value="inloggen"/>
+    </form>
   </div>
-  <!-- End page: News page -->
+</div>
+<!-- End page: Login page -->
 
-  <!-- Page: Settings page -->
-  <div id="settingsPage" data-role="page">
-    <script language="JavaScript">
-      $('#settingsPage').bind('swiperight', function() {
-        $.mobile.changePage($("#homePage"), {reverse:true});
+
+
+<!-- Page: Home page -->
+<div id="homePage" data-role="page">
+  <script language="JavaScript">
+
+    $('#homePage').live('pagebeforeshow', function(e, data) {
+      var cardResponse = JSON.parse(localStorage.getItem("CardResponse"));
+      $("#bestedingslimiet").html("Bestedingslimiet: " + cardResponse.totals.bestedingslimiet);
+      $("#openstaandsaldo").html("Gebruikt: " + cardResponse.totals.openstaandsaldo);
+      $("#nogtebesteden").html("Te besteden: " + cardResponse.totals.nogtebesteden);
+      var htmlList = "";
+      var prevDate = null;
+      $(cardResponse.transactions).each(function (i, transaction) {
+        if (transaction.datum != prevDate) {
+          htmlList += '<li data-role="list-divider">'+transaction.datum+'</li>';
+        }
+        prevDate = transaction.datum;
+        htmlList += '' +
+             '<li>' +
+//               '  <a href="#personPage?id='+person.id+'">' +
+//             '    <h3>Kaart '+transaction.cardnr+'</h3>' +
+             '    <p>'+transaction.omschrijving+'</p>' +
+            (transaction.oorsprbedrag ? '<p style="color:#888">'+transaction.oorsprvaluta + ' ' + transaction.oorsprbedrag+'</p>' : '') +
+            '     <span class="ui-li-count '+(transaction.credit ? 'ui-li-count-green' : '')+'">'+ transaction.valuta + ' ' + transaction.bedrag+'</span>'
+//               '  </a>' +
+             '</li>';
       });
 
-      // page-specific script here..
-      $('#settingsPage').live('pagebeforecreate', function(e, data) {
-        $('#updateAppButton').click(function() {
-          window.open(isAndroid() ? "http://build.phonegap.com/apps/246013/download/android" : "http://build.phonegap.com/apps/246013/download/ios");
-        });
-
-        $('#clearLocalStorageButton').click(function() {
-          localStorage.clear();
-          $.mobile.changePage($("#unknownPage"));
-        });
-      });
-
-      $('#settingsPage').live('pagebeforehide', function (e, data) {
-        $('#updateAppButton').unbind("click");
-        $('#clearLocalStorageButton').unbind("click");
-      });
-    </script>
-    <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
-      <a data-icon="arrow-l" data-direction="reverse" href="#homePage" class="button_back">Home</a>
-      <h1>Instellingen</h1>
-    </div>
-    <div data-role="content">
-      Let op: dit zijn slechts tijdelijke knoppen:<br/><br/>
-      <button id="updateAppButton">Update app</button><br/>
-      <button id="clearLocalStorageButton">Cache legen</button>
-    </div>
+      $("#list").html(htmlList);
+      $("#list").listview("refresh");
+    });
+  </script>
+  <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
+    <a data-icon="arrow-l" data-direction="reverse" href="#loginPage" class="button_back">Log uit</a>
+    <h1>Kaartoverzicht</h1>
   </div>
-  <!-- End page: Settings page -->
+
+  <div data-role="content">
+    <h3>Totalen</h3>
+    <ul id="totals" data-role="listview" data-inset="true" data-divider-theme="d">
+      <li data-role="list-divider" id="bestedingslimiet"></li>
+      <li style="font-size: 0.8em" id="openstaandsaldo"></li>
+      <li style="font-size: 0.8em"  id="nogtebesteden"></li>
+    </ul>
+    <h3>Recente transacties</h3>
+    <ul id="list" data-role="listview" data-inset="true" data-divider-theme="d"></ul>
+  </div>
+</div>
+<!-- End page: Home page -->
 
 
 </body>
