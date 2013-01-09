@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets"
+        xmlns:gap="http://phonegap.com/ns/1.0"
+        id="com.thefuturegroup.mobile"
+        version="0.0.1">
+
+  <name>Bijenkorf Card</name><!-- is also the name of the icon on the device -->
+
+  <description>
+    Mobile App for De Bijenkorf card
+  </description>
+
+  <author href="http://www.x-services.nl"
+          email="eddy@x-services.nl">
+    X-Services VOF
+  </author>
+
+  <!-- default icon -->
+  <icon src="icons/icon-default.png" gap:role="default" />
+
+  <!-- iPhone icons -->
+  <icon src="icons/ios/icon.png" width="57" height="57" />
+  <icon src="icons/ios/icon_at_2x.png" width="114" height="114" />
+
+  <!-- iPad icons -->
+  <icon src="icons/ios/icon-72.png" gap:platform="ios" width="72" height="72" />
+  <icon src="icons/ios/icon-72_at_2x.png" gap:platform="ios" width="144" height="144" />
+
+  <!-- Android icons -->
+  <icon src="icons/android/ldpi.png"  gap:platform="android" gap:density="ldpi" width="36" height="36"/>
+  <icon src="icons/android/mdpi.png"  gap:platform="android" gap:density="mdpi" width="48" height="48"/>
+  <icon src="icons/android/hdpi.png"  gap:platform="android" gap:density="hdpi" width="72" height="72"/>
+  <icon src="icons/android/xhdpi.png" gap:platform="android" gap:density="hdpi" width="96" height="96"/>
+
+  <!-- iPhone splash -->
+  <gap:splash src="splash/ios/Default.png"         gap:platform="ios" width="320" height="480" />
+ 	<gap:splash src="splash/ios/Default_at_2x.png"   gap:platform="ios" width="640" height="960" />
+ 	<gap:splash src="splash/ios/Default_iphone5.png" gap:platform="ios" width="640" height="1136" />
+
+  <!-- iPad splash -->
+  <gap:splash src="splash/ios/Default-Portrait-ipad.png"  gap:platform="ios" width="768" height="1024" />
+  <gap:splash src="splash/ios/Default-Landscape-ipad.png" gap:platform="ios" width="1024" height="768" />
+
+  <!-- Android splash -->
+  <gap:splash src="splash/android/Default-ldpi.png"  width="320" height="460"  gap:platform="android" gap:density="ldpi" />
+ 	<gap:splash src="splash/android/Default-mdpi.png"  width="320" height="500"  gap:platform="android" gap:density="mdpi" />
+ 	<gap:splash src="splash/android/Default-hdpi.png"  width="480" height="760"  gap:platform="android" gap:density="hdpi" />
+ 	<gap:splash src="splash/android/Default-xhdpi.png" width="720" height="1140" gap:platform="android" gap:density="xhdpi" />
+
+  <feature name="http://api.phonegap.com/1.0/network"/>
+  <!--<feature name="http://api.phonegap.com/1.0/camera"/>-->
+  <!--<feature name="http://api.phonegap.com/1.0/contacts"/>-->
+  <!--<feature name="http://api.phonegap.com/1.0/geolocation"/>-->
+
+  <preference name="phonegap-version" value="2.2.0"/>
+  <preference name="orientation" value="default"/><!-- both landscape and portrait-->
+  <preference name="target-device" value="universal"/>
+  <preference name="webviewbounce" value="true"/><!-- iOS rubber banding -->
+  <preference name="ios-statusbarstyle" value="black-opaque"/>
+  <preference name="android-minSdkVersion" value="8" />
+  <preference name="android-installLocation" value="auto" /><!-- preferExternal; preferably install on SD-card -->
+  <preference name="show-splash-screen-spinner" value="false" />
+  <preference name="stay-in-webview" value="false" /><!-- tfg website, linkedin profile -->
+
+  <preference name="splash-screen-duration" value="2500" /> <!-- default 5000 -->
+
+  <!-- allow loading any url in the webview -->
+  <access origin="*" />
+  <preference name="exit-on-suspend" value="true" />
+
+</widget>

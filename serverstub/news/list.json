@@ -1,0 +1,20 @@
+[
+  {
+    "id":"3",
+    "title":"Nieuwsbericht 1",
+    "date":"20-12-2012",
+    "content":"Dit is de inhoud van het nieuwsbericht"
+  },
+  {
+    "id":"4",
+    "title":"Nieuwsbericht 2",
+    "date":"24-12-2012",
+    "content":"Fijne kerstdagen allemaal!"
+  },
+  {
+    "id":"5",
+    "title":"Nieuwsbericht 3",
+    "date":"01-01-2013",
+    "content":"Wij wensen iedereen een gelukkig nieuwjaar."
+  }
+]
