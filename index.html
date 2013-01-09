@@ -29,8 +29,8 @@
         url:url,
         success:successFunction,
         error:function () {
-          alert('Verkeerder login. Probeer het nogmaals.');
           $.mobile.loading('hide');
+          alert('Verkeerder login. Probeer het nogmaals.');
         }
       });
     }, 200);
@@ -54,8 +54,7 @@
 //      if (isKeepLoggedIn()) {
 //        $("#keepLoggedIn").attr("checked", "checked");
 //      }
-      $('#loginButton').click(function () {
-        $('#loginButton').unbind("click");
+      $('#loginButton').bind("click", function () {
         loadCardData($("#loginName").val(), $("#password").val(), function (data) {
           rememberLogin($('#loginName').val(), $('#password').val()); //, $("#keepLoggedIn").val() == "on");
           localStorage.setItem("CardResponse", JSON.stringify(data));
