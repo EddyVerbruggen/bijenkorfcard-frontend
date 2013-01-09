@@ -30,7 +30,7 @@
         success:successFunction,
         error:function () {
           $.mobile.loading('hide');
-          alert('Verkeerder login. Probeer het nogmaals.');
+          alert('Onjuiste login. Probeer het nogmaals.');
         }
       });
     }, 200);
@@ -63,7 +63,7 @@
       })
     });
   </script>
-  <div data-role="header" data-tap-toggle="false" data-position="fixed">
+  <div data-role="header" data-tap-toggle="false">
     <h1>inloggen</h1>
   </div>
   <div data-role="content">
