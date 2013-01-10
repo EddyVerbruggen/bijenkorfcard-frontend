@@ -19,7 +19,6 @@
 
 <script type="text/javascript">
   function loadCardData(loginname, password, successFunction) {
-    $.mobile.loading('show');
     var url = "http://www.libwat.ch/cards/bijenkorf/" + loginname + "/" + password;
 
     setTimeout(function () {
@@ -33,18 +32,24 @@
           alert('Onjuiste login. Probeer het nogmaals.');
         }
       });
-    }, 200);
+    }, 250);
   }
 </script>
 
 <!-- Page: Login page -->
 <div id="loginPage" data-role="page">
   <script language="JavaScript">
-    $('#loginPage').live('pageshow', function (e, data) {
+    $('#loginPage').live('pageinit', function (e, data) {
       if (isKeepLoggedIn()) {
         loadCardData(getLoginName(), getPassword(), function() {
           $.mobile.changePage($("#homePage"), {transition:"none"});
         });
+      }
+    });
+
+    $('#loginPage').live('pageshow', function (e, data) {
+      if (isKeepLoggedIn()) {
+        $.mobile.loading('show');
       }
     });
 
@@ -59,6 +64,7 @@
     $('#loginPage').live('pagebeforeshow', function (e, data) {
       $("#loginName").val(getLoginName());
       $('#loginButton').bind("click", function () {
+        $.mobile.loading('show');
         loadCardData($("#loginName").val(), $("#password").val(), function (data) {
           rememberLogin($('#loginName').val(), $('#password').val(), $("#keepLoggedIn").attr("checked") == "checked");
           localStorage.setItem("CardResponse", JSON.stringify(data));
@@ -73,7 +79,7 @@
   <div data-role="content">
     <h2>Log in met je Bijenkorf kaart&shy;gegevens</h2>
 
-    <form id="loginForm" style="text-align: right">
+    <form id="loginForm">
       <input type="text" name="loginName" id="loginName" value="" placeholder="Gebruikersnaam" autocomplete="off" autocorrect="off"/>
       <input type="password" name="password" id="password" value="" placeholder="Wachtwoord"/>
       <br/>
@@ -132,7 +138,7 @@
   <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
     <a id="backToLogin" data-icon="arrow-l" data-direction="reverse" href="#loginPage" class="button_back">Log uit</a>
 
-    <h1>Kaartoverzicht</h1>
+    <h1>kaartoverzicht</h1>
   </div>
 
   <div data-role="content">
