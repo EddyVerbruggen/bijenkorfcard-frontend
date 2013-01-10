@@ -41,10 +41,10 @@
   <script language="JavaScript">
     $('#loginPage').live('pageinit', function (e, data) {
       if (isKeepLoggedIn()) {
-        loadCardData(getLoginName(), getPassword(), function(data) {
-          localStorage.setItem("CardResponse", JSON.stringify(data));
+//        loadCardData(getLoginName(), getPassword(), function(data) {
+//          localStorage.setItem("CardResponse", JSON.stringify(data));
           $.mobile.changePage($("#homePage"), {transition:"none"});
-        });
+//        });
       }
     });
 
