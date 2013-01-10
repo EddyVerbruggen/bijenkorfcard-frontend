@@ -136,3 +136,7 @@ input::-webkit-input-placeholder {
 #loginPage .ui-grid-a .ui-block-b {
   width: 45%;
 }
+
+.ui-li-static.ui-li-has-count {
+  padding-right: 70px;
+}
