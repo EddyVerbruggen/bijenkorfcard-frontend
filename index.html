@@ -82,13 +82,18 @@
     <form id="loginForm">
       <input type="text" name="loginName" id="loginName" value="" placeholder="Gebruikersnaam" autocomplete="off" autocorrect="off"/>
       <input type="password" name="password" id="password" value="" placeholder="Wachtwoord"/>
-      <br/>
-      <label for="keepLoggedIn">
-        <input type="checkbox" id="keepLoggedIn" data-mini="true"/>
-        Ik wil ingelogd blijven
-      </label>
-      <br/>
-      <input type="button" data-role="button" data-mini="true" data-inline="true" id="loginButton" data-icon="arrow-r" data-iconpos="right" data-theme="a" value="inloggen"/>
+
+      <div class="ui-grid-a">
+        <div class="ui-block-a">
+          <label for="keepLoggedIn">
+            <input type="checkbox" id="keepLoggedIn" data-mini="true"/>
+            Hou mij ingelogd
+          </label>
+        </div>
+        <div class="ui-block-b" style="text-align: right">
+          <input type="button" data-role="button" data-mini="true" data-inline="true" id="loginButton" data-icon="arrow-r" data-iconpos="right" data-theme="a" value="inloggen"/>
+        </div>
+      </div>
     </form>
   </div>
 </div>
