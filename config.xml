@@ -62,7 +62,7 @@
   <preference name="show-splash-screen-spinner" value="false" />
   <preference name="stay-in-webview" value="false" /><!-- tfg website, linkedin profile -->
 
-  <preference name="splash-screen-duration" value="2500" /> <!-- default 5000 -->
+  <!--reference name="splash-screen-duration" value="2500" /--> <!-- default 5000 -->
 
   <!-- allow loading any url in the webview -->
   <access origin="*" />
