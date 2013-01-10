@@ -41,7 +41,8 @@
   <script language="JavaScript">
     $('#loginPage').live('pageinit', function (e, data) {
       if (isKeepLoggedIn()) {
-        loadCardData(getLoginName(), getPassword(), function() {
+        loadCardData(getLoginName(), getPassword(), function(data) {
+          localStorage.setItem("CardResponse", JSON.stringify(data));
           $.mobile.changePage($("#homePage"), {transition:"none"});
         });
       }
@@ -104,7 +105,7 @@
 <div id="homePage" data-role="page">
   <script language="JavaScript">
 
-    $('#homePage').live('pagebeforeshow', function (e, data) {
+    function showCardData() {
       var cardResponse = JSON.parse(localStorage.getItem("CardResponse"));
       $("#bestedingslimiet").html("Bestedingslimiet: " + cardResponse.totals.bestedingslimiet);
       $("#openstaandsaldo").html("Gebruikt: " + cardResponse.totals.openstaandsaldo);
@@ -118,21 +119,22 @@
         prevDate = transaction.datum;
         htmlList += '' +
             '<li>' +
-//               '  <a href="#personPage?id='+person.id+'">' +
-//             '    <h3>Kaart '+transaction.cardnr+'</h3>' +
-            '    <p>' + transaction.omschrijving + '</p>' +
+            '  <p>' + transaction.omschrijving + '</p>' +
             (transaction.oorsprbedrag ? '<p style="color:#888">' + transaction.oorsprvaluta + ' ' + transaction.oorsprbedrag + '</p>' : '') +
-            '     <span class="ui-li-count ' + (transaction.credit ? 'ui-li-count-green' : '') + '">' + transaction.valuta + ' ' + transaction.bedrag + '</span>' +
-//               '  </a>' +
+            '   <span class="ui-li-count ' + (transaction.credit ? 'ui-li-count-green' : '') + '">' + transaction.valuta + ' ' + transaction.bedrag + '</span>' +
         '</li>';
       });
       $("#list").html(htmlList);
       $("#list").listview("refresh");
+    }
+
+    $('#homePage').live('pagebeforeshow', function (e, data) {
+      showCardData();
+
       $("#backToLogin").bind("click", function() {
         localStorage.setItem("keepLoggedIn", null);
         $("#keepLoggedIn").removeAttr("checked");
       });
-
     });
 
     $('#homePage').live('pagebeforehide', function (e, data) {
@@ -141,9 +143,9 @@
 
   </script>
   <div data-role="header" data-theme="c" data-tap-toggle="false" data-position="fixed">
-    <a id="backToLogin" data-icon="arrow-l" data-direction="reverse" href="#loginPage" class="button_back">Log uit</a>
-
+    <a id="backToLogin" data-icon="arrow-l" data-direction="reverse" href="#loginPage" class="button_back">log uit</a>
     <h1>kaartoverzicht</h1>
+    <a data-icon="refresh" href="#" onclick="$.mobile.loading('show', {text:'Gegevens worden ververst..'}); setTimeout(function(){loadCardData(getLoginName(), getPassword(), function(data) {localStorage.setItem('CardResponse', JSON.stringify(data)); showCardData(); $.mobile.loading('hide');})},250)">vernieuw</a>
   </div>
 
   <div data-role="content">
