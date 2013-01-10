@@ -128,3 +128,11 @@ input::-webkit-input-placeholder {
   white-space: normal;
   font-size: 13px;
 }
+
+#loginPage .ui-grid-a .ui-block-a {
+  width: 55%;
+}
+
+#loginPage .ui-grid-a .ui-block-b {
+  width: 45%;
+}
