@@ -19,12 +19,21 @@
 
 <script type="text/javascript">
   function loadCardData(loginname, password, successFunction) {
-    var url = "http://www.libwat.ch/cards/bijenkorf/" + loginname + "/" + password;
+//    var url = "http://www.libwat.ch/cards/bijenkorf/" + loginname + "/" + password;
+    // for SSL, we can use this url, which is libwat.ch
+    var url = "https://morning-stone-3983.herokuapp.com/cards/bijenkorf";
+
+    var data = {
+      'username': loginname,
+      'password': password
+    };
 
     setTimeout(function () {
       $.ajax({
+        data: data,
         dataType:"json",
         async:true,
+        type: 'POST',
         url:url,
         success:successFunction,
         error:function () {
