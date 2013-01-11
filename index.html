@@ -36,9 +36,9 @@
         type: 'POST',
         url:url,
         success:successFunction,
-        error:function () {
+        error:function (xhr, textStatus, errorThrown) {
           $.mobile.loading('hide');
-          alert('Onjuiste login. Probeer het nogmaals.');
+          alert('Onjuiste login of timeout. Probeer het nogmaals.');
         }
       });
     }, 250);
