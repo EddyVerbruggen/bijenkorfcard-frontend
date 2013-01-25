@@ -18,6 +18,15 @@
 <body>
 
 <script type="text/javascript">
+  $(document).ready(function() {
+    // init phonegap
+    document.addEventListener('deviceready', onDeviceReady, false);
+  });
+
+  function onDeviceReady() {
+    navigator.splashscreen.hide();
+  }
+
   function loadCardData(loginname, password, successFunction) {
 //    var url = "http://www.libwat.ch/cards/bijenkorf/" + loginname + "/" + password;
     // for SSL, we can use this url, which is libwat.ch

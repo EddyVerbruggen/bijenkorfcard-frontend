@@ -61,6 +61,7 @@
   <preference name="android-installLocation" value="auto" /><!-- preferExternal; preferably install on SD-card -->
   <preference name="show-splash-screen-spinner" value="false" />
   <preference name="stay-in-webview" value="false" /><!-- tfg website, linkedin profile -->
+  <preference name="auto-hide-splash-screen" value="false" /><!-- we're hiding it with js -->
 
   <!--reference name="splash-screen-duration" value="2500" /--> <!-- default 5000 -->
 
